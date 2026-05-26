@@ -1,0 +1,90 @@
+
+const Hotel = require('./../models/hotel')
+
+
+exports.getAllHotels = async (request,response)=>{
+   
+     try {
+        const hotels = await Hotel.find();
+        response.status(200).json({
+            status: 'success',
+            count: hotels.length,
+            data: {
+                hotels
+            }
+        })
+    } catch (error) {
+        response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to load the data'
+        })
+    }
+}
+exports.createHotels = async (request,response)=>{
+   
+      try {
+        
+        const hotel = await Hotel.create(request.body);
+        response.status(201).json({
+            status: 'success',
+            data: {
+                hotel: hotel
+            }
+
+        })
+
+    } catch (error) {
+        response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to create a Document'
+        })
+    }
+
+}
+exports.getHotelById = async (request,response)=>{
+
+    try{
+        const id = request.params.id;
+        const hotel = await Hotel.findById(id);
+         response.status(200).json({
+            status: 'success',
+            data: {
+                hotels
+         }
+        })
+    }catch (error){
+       response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to fetch by id'
+        })
+    }
+
+}   
+exports.deleteHotel = async (request,response)=>{
+   
+    try{
+        const id = request.params.id;
+        await Hotel.deleteOne({_id:id})
+        response.status(201).json({
+            status: 'success',
+            message:"data deleted suucessfully"
+
+        })
+    } catch(error){
+            response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to create a Document'
+        })
+    }
+   
+}
+exports.updatedHotel=(request,response)=>{
+   
+}
+
+exports.checkHotelExist = (request, response, next, value, name) => {
+   
+}
+exports.validatePostData=(request,response,next)=>{
+   
+}
