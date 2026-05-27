@@ -13,11 +13,23 @@ exports.getAllHotels = async (request, response) => {
         })
         const filteredQuery = getFilteredFinalQuery(queryObj);
         console.log(filteredQuery)
-        const hotels = await Hotel.find(filteredQuery);
+
+        let query = Hotel.find(queryObj);
+        
+        // Sorting
+        if (request.query.sort) {
+            const sortBy = request.query.sort.split(',').join(' ')
+            query = query.sort(sortBy) // e.g. 'cheapestPrice ratings'
+        } else {
+            query = query.sort('cheapestPrice')
+        }
+
+
+        const hotels = await query;
         response.status(200).json({
             status: 'success',
             count: hotels.length,
-            data: [
+            data:[
                 hotels
             ]
         })
@@ -29,27 +41,7 @@ exports.getAllHotels = async (request, response) => {
     }
 }
 
-exports.createHotels = async (request,response)=>{
-   
-      try {
-        
-        const hotel = await Hotel.create(request.body);
-        response.status(201).json({
-            status: 'success',
-            data: {
-                hotel: hotel
-            }
 
-        })
-
-    } catch (error) {
-        response.status(500).json({
-            status: 'Fail',
-            message: 'Failed to create a Document'
-        })
-    }
-
-}
 
 const getFilteredFinalQuery = (queryObj) => {
     const filterQuery = {};
@@ -75,6 +67,27 @@ const getFilteredFinalQuery = (queryObj) => {
 
 
 
+exports.createHotels = async (request,response)=>{
+   
+      try {
+        
+        const hotel = await Hotel.create(request.body);
+        response.status(201).json({
+            status: 'success',
+            data: {
+                hotel: hotel
+            }
+
+        })
+
+    } catch (error) {
+        response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to create a Document'
+        })
+    }
+
+}
 
 
 
@@ -108,37 +121,38 @@ const getFilteredFinalQuery = (queryObj) => {
 
 
 
-// exports.getHotelById = async (request,response)=>{
+
+exports.getHotelById = async (request,response)=>{
     
-//     try {
-//         const hotelData = await Hotel.findById(req.params.id);
-//         response.status(200).json({
-//             status: "success",
-//             data: hotelData
-//         })
-//     } catch (error) {
-//         response.status(400).json({
-//             status: "fail",
-//             message: error.message
-//         })
-//     }
-// }
+    try {
+        const hotelData = await Hotel.findById(request.params.id);
+        response.status(200).json({
+            status: "success",
+            data: hotelData
+        })
+    } catch (error) {
+        response.status(400).json({
+            status: "fail",
+            message: error.message
+        })
+    }
+}
 
-// exports.deleteHotel = async (request,response)=>{
+exports.deleteHotel = async (request,response)=>{
    
-//     try{
-//         const id = request.params.id;
-//         await Hotel.deleteOne({_id:id})
-//         response.status(201).json({
-//             status: 'success',
-//             message:"data deleted suucessfully"
+    try{
+        const id = request.params.id;
+        await Hotel.deleteOne({_id:id})
+        response.status(201).json({
+            status: 'success',
+            message:"data deleted suucessfully"
 
-//         })
-//     } catch(error){
-//             response.status(500).json({
-//             status: 'Fail',
-//             message: 'Failed to create a Document'
-//         })
-//     }
+        })
+    } catch(error){
+            response.status(500).json({
+            status: 'Fail',
+            message: 'Failed to create a Document'
+        })
+    }
    
-// }
+}
