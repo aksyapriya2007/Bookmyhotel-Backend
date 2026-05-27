@@ -1,34 +1,5 @@
 const Hotel = require('./../models/hotel')
 
-
-// exports.getAllHotels = async (request,response)=>{
-   
-    //  try {
-    //     console.log(request.query)
-
-    //     const queryObj = { ...request.query};
-    //     const excludeFields = ["sort","page","limit","fields"]
-    //     excludeFields.forEach((ele)=>{
-    //         delete queryObj[ele]
-    //     })
-    //     const filterQuery = getFilteredFinalQuery()
-    //     const hotels = await Hotel.find(filterQuery) 
-  
-    //      response.status(200).json({
-    //         status: 'success',
-    //         count: hotels.length,
-    //         data: {
-    //             hotels
-    //         }
-    //     })
-    // } catch (error) {
-    //     response.status(500).json({
-    //         status: 'Fail',
-    //         message: 'Failed to load the data'
-    //     })
-    // }
-    //}
-
     exports.getAllHotels = async (request, response) => {
     try {
         console.log(request.query)
@@ -79,24 +50,21 @@ exports.createHotels = async (request,response)=>{
 
 }
 exports.getHotelById = async (request,response)=>{
-
-    try{
-        const id = request.params.id;
-        const hotel = await Hotel.findById(id);
-         response.status(200).json({
-            status: 'success',
-            data: {
-                hotels
-         }
+    
+    try {
+        const hotelData = await Hotel.findById(req.params.id);
+        response.status(200).json({
+            status: "success",
+            data: hotelData
         })
-    }catch (error){
-       response.status(500).json({
-            status: 'Fail',
-            message: 'Failed to fetch by id'
+    } catch (error) {
+        response.status(400).json({
+            status: "fail",
+            message: error.message
         })
     }
+}
 
-}   
 exports.deleteHotel = async (request,response)=>{
    
     try{
@@ -119,32 +87,9 @@ exports.updatedHotel=(request,response)=>{
    
 }
 
-// const getFilteredFinalQuery = ()=>{
-//      const filteredQuery = {};
-//      for(const key in queryObj){
-//         const value = queryObj[key];
-//         const match = key.match(/^(.*)\[(gte|gt|lte|lt)\]$/)
-//         console.log(match)
-//         if(match){
-//             const fieldName = match[1]
-//             const operator = `$$(match[2])`
-//             if(!filteredQuery[fieldName]) {
-//                 filteredQuery[fieldName] = {};
-//                 filteredQuery[fieldName][operator] = value
-//             }
-//         }else{
-//             filteredQuery[key] = value
-//         }
-//     }
-//      return filteredQuery
-
-// }
-
 const getFilteredFinalQuery = (queryObj) => {
     const filterQuery = {};
-    // { city: 'Chennai', 'ratings[gte]': '4', 'cheapestPrice[lt]': '3000' } QueryObject
-    // { city: 'Chennai', ratings: { $gte: 4 }, cheapestPrice: { $lt: 3000 } }  Wants to convert like this 
-
+   
     for (const key in queryObj) {
         const value = queryObj[key];
         const match = key.match(/^(.*)\[(gte|gt|lte|lt)\]$/);
