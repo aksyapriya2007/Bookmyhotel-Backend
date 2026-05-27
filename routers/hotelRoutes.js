@@ -10,7 +10,6 @@ hotelRouter.route('/')
          
 hotelRouter.route('/:id')
          .get(hotelController.getHotelById)
-         .patch(hotelController.updatedHotel)
          .delete(hotelController.deleteHotel)
 
 

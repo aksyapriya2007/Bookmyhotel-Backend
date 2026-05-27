@@ -1,14 +1,15 @@
 const Hotel = require('./../models/hotel')
 
-    exports.getAllHotels = async (request, response) => {
+exports.getAllHotels = async (request, response) => {
+
     try {
         console.log(request.query)
-
         const queryObj = { ...request.query }
         const excludedFields = ['sort', 'page', 'limit', 'fields']
-
         excludedFields.forEach((ele) => {
+
             delete queryObj[ele]
+
         })
         const filteredQuery = getFilteredFinalQuery(queryObj);
         console.log(filteredQuery)
@@ -49,43 +50,6 @@ exports.createHotels = async (request,response)=>{
     }
 
 }
-exports.getHotelById = async (request,response)=>{
-    
-    try {
-        const hotelData = await Hotel.findById(req.params.id);
-        response.status(200).json({
-            status: "success",
-            data: hotelData
-        })
-    } catch (error) {
-        response.status(400).json({
-            status: "fail",
-            message: error.message
-        })
-    }
-}
-
-exports.deleteHotel = async (request,response)=>{
-   
-    try{
-        const id = request.params.id;
-        await Hotel.deleteOne({_id:id})
-        response.status(201).json({
-            status: 'success',
-            message:"data deleted suucessfully"
-
-        })
-    } catch(error){
-            response.status(500).json({
-            status: 'Fail',
-            message: 'Failed to create a Document'
-        })
-    }
-   
-}
-exports.updatedHotel=(request,response)=>{
-   
-}
 
 const getFilteredFinalQuery = (queryObj) => {
     const filterQuery = {};
@@ -95,8 +59,8 @@ const getFilteredFinalQuery = (queryObj) => {
         const match = key.match(/^(.*)\[(gte|gt|lte|lt)\]$/);
         console.log(match)
         if (match) {
-            const fieldName = match[1] //ratings
-            const operator = `$${match[2]}` //$gte
+            const fieldName = match[1]       //ratings
+            const operator = `$${match[2]}`  //$gte
             if (!filterQuery[fieldName]) {
                 filterQuery[fieldName] = {};
                 filterQuery[fieldName][operator] = value
@@ -104,13 +68,77 @@ const getFilteredFinalQuery = (queryObj) => {
         } else {
             filterQuery[key] = value
         }
-
-
-
     }
-
-
-    console.log(filterQuery)
-
-    return filterQuery
+      console.log(filterQuery)
+      return filterQuery
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// exports.getHotelById = async (request,response)=>{
+    
+//     try {
+//         const hotelData = await Hotel.findById(req.params.id);
+//         response.status(200).json({
+//             status: "success",
+//             data: hotelData
+//         })
+//     } catch (error) {
+//         response.status(400).json({
+//             status: "fail",
+//             message: error.message
+//         })
+//     }
+// }
+
+// exports.deleteHotel = async (request,response)=>{
+   
+//     try{
+//         const id = request.params.id;
+//         await Hotel.deleteOne({_id:id})
+//         response.status(201).json({
+//             status: 'success',
+//             message:"data deleted suucessfully"
+
+//         })
+//     } catch(error){
+//             response.status(500).json({
+//             status: 'Fail',
+//             message: 'Failed to create a Document'
+//         })
+//     }
+   
+// }

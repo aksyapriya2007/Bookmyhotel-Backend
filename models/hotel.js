@@ -64,4 +64,4 @@ const hotelSchema = mongoose.Schema({
 
 // hotel1.save()
 
-module.exports = mongoose.model('Hotel', hotelSchema)
+module.exports = hotelSchema

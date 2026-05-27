@@ -33,13 +33,12 @@ const deleteDocuments = async ()=>{
     }
 }
 
-
 //import all the data into collection
 
 const importDocuments = async () => {
     try{
        await hotel.create(hotels)
-       console.log("data impoted")
+       console.log("data")
     } catch (error) {
         console.log(error.message)
     }
