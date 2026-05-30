@@ -29,21 +29,17 @@ exports.getAllHotels = async (request, response) => {
         //projection
          
         if(request.query.fields) {
-        const fields = request.query.fields.split(',').join(' ')
-        query = query.select(fields)
+           const fields = request.query.fields.split(',').join(' ')
+           query = query.select(fields)
         } else {
             query = query.select('-__v')
         }
         
 
         //Implement Pagination
+
         const page = request.query.page || 1;
         const limit = request.query.limit || 10;
-
-//page-1 skip -0 , limit -10;
-//page-2 skip -10 , limit -10;
-//page-3 skip - 20 , limit -10;
-
         const skip = (page-1)*limit
         query = query.skip(skip).limit(limit)
 
@@ -54,7 +50,6 @@ exports.getAllHotels = async (request, response) => {
             }
         }
         
-
 
         const hotels = await query;
         response.status(200).json({
@@ -72,12 +67,10 @@ exports.getAllHotels = async (request, response) => {
     }
 }
 
-
-
 const getFilteredFinalQuery = (queryObj) => {
     const filterQuery = {};
    
-    for (const key in queryObj) {
+    for(const key in queryObj) {
         const value = queryObj[key];
         const match = key.match(/^(.*)\[(gte|gt|lte|lt)\]$/);
         console.log(match)
@@ -97,10 +90,9 @@ const getFilteredFinalQuery = (queryObj) => {
 }
 
 
-
 exports.createHotels = async (request,response)=>{
    
-      try {
+      try{
         
         const hotel = await Hotel.create(request.body);
         response.status(201).json({

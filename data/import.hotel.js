@@ -21,7 +21,6 @@ mongoose.connect(connectionString)
 
 const hotels = JSON.parse(fs.readFileSync('./data/hotels.json','utf-8'))
 
-
 //delete all the documents and collections 
 
 const deleteDocuments = async ()=>{
