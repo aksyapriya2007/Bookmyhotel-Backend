@@ -3,23 +3,27 @@ const app = express();
 const hotelRouter = require('./routers/hotelRoutes');
 app.use(express.json())
 
-// const morgan = require('morgan');
-// app.use(express.static('./template'))
-// const userRouter = require ('./routers/userRoutes')
-// const logger = (request, response, next) => {
-//     console.log(`${request.method}:${request.url}`);
-//     next();
-// }
+const morgan = require('morgan');
+app.use(express.static('./template'))
 
-// app.use((request, response, next) => {
-//     request.requestedAt = new Date().toISOString();
-//     next();
-// })
+
+const logger = (request, response, next) => {
+    console.log(`${request.method}:${request.url}`);
+    next();
+}
+
+app.use((request, response, next) => {
+    request.requestedAt = new Date().toISOString();
+    next();
+})
 
 // app.use(logger);
 // app.use(morgan('dev'))
 
-
+if(process.env==='developement'){
+    app.use(logger)
+    app.use(morgan('dev'))
+}
 app.use('/api/v1/hotels', hotelRouter);
 
 

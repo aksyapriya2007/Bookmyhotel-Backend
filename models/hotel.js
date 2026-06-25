@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const hotelSchema = mongoose.Schema({
-     name: {
+    name: {
         type: String,
         required: true,
         trim: true
@@ -55,12 +55,12 @@ const hotelSchema = mongoose.Schema({
 
 })
  const Hotel = mongoose.model('Hotel', hotelSchema);
- const hotel1 = new Hotel({
+//  const hotel1 = new Hotel({
 
-            name: 'Dotel',
-            city: 'Chennai',
-            cheapestPrice: 5000
-     });
+//             name: 'Dotel',
+//             city: 'Chennai',
+//             cheapestPrice: 5000
+//      });
 
 // hotel1.save()
 module.exports = Hotel

@@ -37,7 +37,7 @@ const deleteDocuments = async ()=>{
 const importDocuments = async () => {
     try{
        await hotel.create(hotels)
-       console.log("data")
+       console.log("data imported successfully")
     } catch (error) {
         console.log(error.message)
     }
@@ -53,3 +53,34 @@ if(process.argv[2]==="--import")
   importDocuments()
 }
 // console.log(process.argv)
+
+
+// const hotel = JSON.parse(fs.readFileSync('./data/import.hotel.js','utf-8'))
+
+// const deleteDocuments = async()=>{
+       
+//   try{
+//      await hotel.deleteMany({})
+//      console.log('hotels daleted successfully')
+//   } catch (error) {
+//     console.log('error')
+//   }
+// }
+
+// const importDocuments = async()=>{
+  
+//   try{
+//        await hotel.create(hotels)
+//        console.log("hotels craeted successfully")
+//   } catch (error) {
+//     console.log('error')
+//   }
+//   process.exit()
+// }
+
+// if(process.argv[2]==='--delete'){
+//      deleteDocuments()
+// }
+// if(process.argv[2]==='--import'){
+//   importDocuments()
+// }
