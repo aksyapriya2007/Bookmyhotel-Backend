@@ -8,7 +8,7 @@ const hotel = require('./../models/hotel')
 const dns = require('dns')
 dns.setServers(['8.8.8.8','8.8.4.4'])
 
-const connectionString = 'mongodb+srv://aksyapraveen305_db_user:DdjlJSGyqxEUIS7b@supercampus.2lkmde8.mongodb.net/bookmystay?appName=SuperCampus'
+const connectionString = process.env.CONNECTION_STRING    
 mongoose.connect(connectionString)
 .then((conn)=>{
   console.log("script database connected")

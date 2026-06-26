@@ -25,10 +25,31 @@ if(process.env==='developement'){
     app.use(morgan('dev'))
 }
 app.use('/api/v1/hotels', hotelRouter);
-
-
 // app.use('/api/v1/users',userRouter)
 // app.param('id',userRouter.usersParamMiddleware)
+
+
+//GLOBAL ERROR HANDLER 
+
+app.use((error,request,response,next)=>{
+    
+    response.status(error.status.code || 500).json({
+        status:error.status,
+        message:error.message
+    })
+    next()
+})
+
+
+//DEFAULT ROUTER(404 ERROR NOT FOUND)
+
+
+app.all('*splat',(request,response)=>{
+    response.status(200).json({
+        status:"fail",
+        message:`the ${request.originalUrl} is not found`
+    })
+})
 
 module.exports = app; 
 

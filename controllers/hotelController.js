@@ -3,9 +3,9 @@ const ApiFeatures = require('../utilities/features')
 
 exports.getAllHotels = async (request, response) => {
 
-         try{
+     try{
           
-         const features=new ApiFeatures(Hotel.find(),request.query)
+         const features = new ApiFeatures(Hotel.find(),request.query)
          const query = features.filter().sort().fieldLimit().pagination().queryObj;
          
          const hotels = await query
@@ -16,7 +16,7 @@ exports.getAllHotels = async (request, response) => {
             data :{
                 hotels
             }
-        })
+      })
 
       } catch (error) {
              response.status(500).json({
@@ -26,26 +26,28 @@ exports.getAllHotels = async (request, response) => {
       }
 }
 
-exports.getFeaturedHotels = async(request,response)=>{
+exports.getFeaturedHotels = async (request,response)=>{
+
     //   request.query.param.feature = 'true'
     //   request.query.params.ratings = '-ratings'
     //   request.query.params.limit = 5
-    // Object.defineProperty(request,'query',{
-    //  value:{...request.query,feature:true,sort:'-ratings',limit:5}
-    // })
+
+    //   Object.defineProperty(request,'query',{
+    //   value:{...request.query,feature:true,sort:'-ratings',limit:5}
+    //   })
 
     //   next()
 
     try{
                 const hotelFeature = await Hotel.aggregate([
-                {$match:{feature:'true'}},
-                {$sort:{ratings:-1}},
-                {count :{ $sum:1}}
+                { $match:{feature:true} },
+                { $sort:{ratings:-1} },
+                { $limit : 5}
         ])
 
         response.status(200).json({
             status:"success",
-            count:hotelfeature.length,
+            count:hotelFeature.length,
             data:{
                 hotelFeature
             }
@@ -54,10 +56,11 @@ exports.getFeaturedHotels = async(request,response)=>{
     }catch(error){
          response.status(500).json({
                 status:"error",
-                message:"error"
+                message:error.message
              })
     }
 }
+
 exports.getByCity =async(request,response)=>{
 
        try{
@@ -154,7 +157,9 @@ exports.getByType = async(request,response)=>{
 //              })
 //     }
 // }
-// exports.getHotelByCategory =async (request,response)=>{
+
+// exports.getHotelByCategory = async (request,response)=>{
+
 //     try{
         
 //            const hotelByCategory = await Hotel.aggregate([
@@ -201,6 +206,7 @@ exports.createHotels = async (request,response)=>{
    
       try{
         
+
         const hotel = await Hotel.create(request.body);
         response.status(201).json({
             status: 'success',
@@ -213,7 +219,7 @@ exports.createHotels = async (request,response)=>{
       } catch (error) {
         response.status(500).json({
             status: 'Fail',
-            message: 'Failed to create a Document'
+            message: error.message
         })
     }
 

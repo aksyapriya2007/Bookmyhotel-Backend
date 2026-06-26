@@ -9,17 +9,29 @@ const hotelSchema = mongoose.Schema({
     type: {
         // apartment villa , resort , cabin , cafeteria 
         type: String,
-        required: [true, 'hotel type required']
-    },
+        required: [true, 'hotel type required'],
+        enum:{
+            values:['resort','villa','apartment','cabin'],
+            message:"this type of hotel not allowed"
+    }
+},
     city: {
         type: String,
-        required: [true, 'city is mandatory for hotel ']
+        required: [true, 'city is mandatory for hotel '],
+        minLength:3,
+        maxLength:50
     },
     // description:String,
     ratings: {
         type: Number,
-        min: 0,
-        max: 5
+        min: [0,"min ratings should be 0"],
+        max: [5, "max ratings should be 5"]
+    //    validate:{
+    //     validator:function(value){
+    //         return value >=0 && value <=5
+    //     },
+    //     message:"ratings are not valid"
+    //    }
     },
     address: {
         type: String,
@@ -51,10 +63,54 @@ const hotelSchema = mongoose.Schema({
     description: {
         type: String,
         required: [true, 'description is required ']
+    },
+    createdAt:{
+        type:String
+    },
+    createdBy:{
+        type:String
     }
 
+},{
+    toJSON:{virtuals:true}
 })
- const Hotel = mongoose.model('Hotel', hotelSchema);
+
+hotelSchema.virtual('isPremium').get(function(){
+    return this.cheapestPrice >=2000
+})
+
+hotelSchema.pre('save',function(){
+        this.createdAt = new Date().toISOString()
+        this.createdBy = "aksya"
+})
+
+hotelSchema.post('save',function(docs){
+    console.log(docs)
+})
+
+hotelSchema.pre('find',function(){
+    this.find({isDeleted:false})
+})
+
+hotelSchema.post('find',function(docs){
+    console.log(`${docs.length} hotel retrieved`)
+})
+
+hotelSchema.pre('aggregate',function(){
+     this.pipeline().unshift({
+     $match:{isDeleted:false}
+     })
+     console.log(this.pipeline())
+})
+
+hotelSchema.post('aggregate',function(docs){
+    console.log(docs)
+})
+
+
+module.exports= mongoose.model('Hotel', hotelSchema);
+
+
 //  const hotel1 = new Hotel({
 
 //             name: 'Dotel',
@@ -63,4 +119,3 @@ const hotelSchema = mongoose.Schema({
 //      });
 
 // hotel1.save()
-module.exports = Hotel
