@@ -4,6 +4,7 @@ node_modules/
 # Environment files
 .env
 *.env
+.env.*
 config.env
 
 # Logs
@@ -21,3 +22,7 @@ pnpm-debug.log*
 dist/
 build/
 coverage/
+
+# Development caches and temporary files
+.cache/
+.tmp/
