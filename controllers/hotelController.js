@@ -61,7 +61,7 @@ exports.getFeaturedHotels = async (request,response)=>{
     }
 }
 
-exports.getByCity =async(request,response)=>{
+exports.getByCity = async(request,response)=>{
 
        try{
  
